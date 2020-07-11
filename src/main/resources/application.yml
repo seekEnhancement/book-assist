@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: boot-assist
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+
+logging:
+  level:
+    root: INFO
+    woos.bookassist: DEBUG
+
+openapi:
+  kakao:
+    appKey: ${DEVKAKAO_APP_KEY}
+
+kakao:
+  ribbon:
+    NIWSServerListClassName: com.netflix.loadbalancer.ConfigurationBasedServerList
+    listOfServers: https://dapi.kakao.com
