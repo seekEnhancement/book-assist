@@ -47,6 +47,15 @@ class BookSearchControllerTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 
+    @Test
+    public void testResourceNotFound() {
+        String query = "notexistingbookquery";
+        ResponseEntity<Object> responseEntity = testRestTemplate.exchange(
+                String.format("%s?query=%s", "/search/book", query), HttpMethod.GET,
+                new HttpEntity(createHeaders(username, password)), Object.class);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
     // ref. - https://www.baeldung.com/how-to-use-resttemplate-with-basic-authentication-in-spring#manual_auth
     private HttpHeaders createHeaders(String username, String password) {
         return new HttpHeaders() {{

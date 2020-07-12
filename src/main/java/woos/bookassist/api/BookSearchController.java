@@ -38,8 +38,8 @@ public class BookSearchController {
                 makeOneBased(page), size);
         Page<Document> resultPage = new PageImpl<>(searchResult.getDocuments(), PageRequest.of(page, size),
                 searchResult.getMeta().getTotalCount());
-        if (page > resultPage.getTotalPages()) {
-            throw new ResourceNotFoundException();
+        if (page > resultPage.getTotalPages() || resultPage.getTotalPages() == 0) {
+            throw new ResourceNotFoundException(query);
         }
         applicationEventPublisher.publishEvent(new PaginatedResultsRetrievedEvent<Document>(
                 Document.class, uriBuilder, response, page, resultPage.getTotalPages(), size));
