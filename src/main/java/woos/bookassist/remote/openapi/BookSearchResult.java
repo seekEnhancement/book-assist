@@ -3,6 +3,7 @@ package woos.bookassist.remote.openapi;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +13,8 @@ public class BookSearchResult {
     List<Document> documents;
 
     @Data
-    public static class Document {
+    public static class Document implements Serializable {
+        private static final long serialVersionUID = -5930756756287719790L;
         String title;
         String contents;
         String url;

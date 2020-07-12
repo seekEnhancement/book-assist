@@ -9,5 +9,6 @@ public interface BookSearchClient {
     String TARGET_TITLE = "title";
 
     @GetMapping("/v3/search/book")
-    BookSearchResult search(@RequestParam(defaultValue = TARGET_TITLE) String target, @RequestParam String query);
+    BookSearchResult search(@RequestParam(defaultValue = TARGET_TITLE) String target, @RequestParam String query,
+                            @RequestParam int page, @RequestParam int size);
 }

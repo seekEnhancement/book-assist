@@ -1,4 +1,4 @@
-package woos.bookassist.common;
+package woos.bookassist.common.configuration;
 
 import feign.Logger;
 import org.springframework.context.annotation.Bean;

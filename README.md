@@ -27,6 +27,7 @@
   - key features
     - kakao/naver openapi integration with declarative httpclient(openfeign)
       - hystrix circuit breaker / ribbon retry (apache httpclient connec/read timeout)
+    - spring mvc HATEOAS style rest pagination
     - asynchronous search history db insert using reactor  
     - top 10 search keyword using caffeine in-memory cache (1m expire)
     - spring security database userdetails extension, basic authentication, [oauth token]
@@ -49,4 +50,14 @@
   - https://start.spring.io
   - https://developers.kakao.com/docs/latest/ko/daum-search/dev-guide
   - https://developers.naver.com/docs/search/book/
+  - https://www.baeldung.com/rest-api-pagination-in-spring
 
+## Book Search Test
+  - start application
+```
+java -jar -Dfile.encoding=UTF-8 build/libs/bookassist-0.0.1-SNAPSHOT.jar
+```
+  - book search api using curl (with default basic auth user, json format with npm module - npm install json -g)
+```
+curl -v -u 'woo:woo00' "http://localhost:8080/search/book?query=java" | json
+```
