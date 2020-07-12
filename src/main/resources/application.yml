@@ -25,8 +25,16 @@ logging:
 openapi:
   kakao:
     appKey: ${DEVKAKAO_APP_KEY}
+  naver:
+    clientId: ${DEVNAVER_CLIENT_ID}
+    clientSecret: ${DEVNAVER_CLIENT_SECRET}
 
 kakao:
   ribbon:
     NIWSServerListClassName: com.netflix.loadbalancer.ConfigurationBasedServerList
     listOfServers: https://dapi.kakao.com
+
+naver:
+  ribbon:
+    NIWSServerListClassName: com.netflix.loadbalancer.ConfigurationBasedServerList
+    listOfServers: https://openapi.naver.com
