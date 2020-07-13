@@ -28,7 +28,7 @@ public class BookSearchController {
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
 
-    @GetMapping(value = "/search/book")
+    @GetMapping(value = "/book/search")
     public List<Document> searchBook(@RequestParam("query") String query,
                                      @RequestParam(value = "page", defaultValue = "0") int page,
                                      @RequestParam(value = "size", defaultValue = "10") int size,

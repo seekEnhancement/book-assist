@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import woos.bookassist.common.exception.BaseRuntimeException;
 import woos.bookassist.common.exception.ErrorResponse;
 import woos.bookassist.common.exception.ResourceNotFoundException;
+import woos.bookassist.common.exception.UserRegisterFailedException;
 
 import java.util.function.Consumer;
 
@@ -20,6 +21,12 @@ public class BookSearchExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     protected ResponseEntity<ErrorResponse> handleResourceNotFound(BaseRuntimeException exception) {
+        return makeResponseEntity(exception, x -> log.warn(x.getMessage(), x));
+    }
+
+    @ExceptionHandler(UserRegisterFailedException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ResponseEntity<ErrorResponse> handleUserRegisterFailed(BaseRuntimeException exception) {
         return makeResponseEntity(exception, x -> log.warn(x.getMessage(), x));
     }
 

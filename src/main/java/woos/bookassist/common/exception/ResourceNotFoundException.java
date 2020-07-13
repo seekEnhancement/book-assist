@@ -3,7 +3,7 @@ package woos.bookassist.common.exception;
 import org.springframework.http.HttpStatus;
 
 public class ResourceNotFoundException extends BaseRuntimeException {
-    private static final int CODE_RESOURCE_NOT_FOUND = 400001;
+    public static final int CODE_RESOURCE_NOT_FOUND = 400001;
 
     public ResourceNotFoundException(String query) {
         super(HttpStatus.NOT_FOUND, CODE_RESOURCE_NOT_FOUND, "query:[" + query + "] is not found.");

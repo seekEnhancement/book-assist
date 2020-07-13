@@ -30,7 +30,7 @@ class BookSearchControllerTest {
     public void testSearchBook() {
         String query = "java";
         ResponseEntity<List<Document>> responseEntity = testRestTemplate.exchange(
-                String.format("%s?query=%s", "/search/book", query), HttpMethod.GET,
+                String.format("%s?query=%s", "/book/search", query), HttpMethod.GET,
                 new HttpEntity(createHeaders(username, password)), new ParameterizedTypeReference<List<Document>>() {
                 });
 
@@ -42,7 +42,7 @@ class BookSearchControllerTest {
     @Test
     public void testUnauthorized() {
         ResponseEntity<Object> responseEntity = testRestTemplate.exchange(
-                "/search/book?query=java", HttpMethod.GET,
+                "/book/search?query=java", HttpMethod.GET,
                 null, Object.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
@@ -51,7 +51,7 @@ class BookSearchControllerTest {
     public void testResourceNotFound() {
         String query = "notexistingbookquery";
         ResponseEntity<Object> responseEntity = testRestTemplate.exchange(
-                String.format("%s?query=%s", "/search/book", query), HttpMethod.GET,
+                String.format("%s?query=%s", "/book/search", query), HttpMethod.GET,
                 new HttpEntity(createHeaders(username, password)), Object.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
