@@ -60,10 +60,13 @@ java -jar -Dfile.encoding=UTF-8 build/libs/bookassist-0.0.1-SNAPSHOT.jar
 ```
   - book search api using curl (with default basic auth user, json format with npm module - npm install json -g)
 ```
-curl -v -u 'woo:woo00' "http://localhost:8080/search/book?query=java" | json
+curl -v -u 'woo:woo00' "http://localhost:8080/book/search?query=java" | json
 ```
-  - user register api using curl
-    - invalid UserRequest example
+  - query parameter with Korean example (--data-urlencode, curl -G for GET)
+```
+curl -v -G -u 'woo:woo00' "http://localhost:8080/book/search" --data-urlencode "query=미움받을 용기" | json
+```
+  - user register api using curl invalid UserRequest example
 ```
 curl -v -H 'Content-Type: application/json'  -d '{"id" : "s", "name" : "invalid name with more than 20 characters", "password": "pwd00", "passwordVerify": null, "email": "notvalidemail" }' "http://localhost:8080/user/register"
 ..
@@ -71,7 +74,7 @@ curl -v -H 'Content-Type: application/json'  -d '{"id" : "s", "name" : "invalid 
 ..
 {"status":400,"code":600001,"message":"passwordConfirm: passwordVerify should be equal to password., passwordVerify: 비어 있을 수 없습니다, name: 크기가 2에서 20 사이여야 합니다, id: 크기가 2에서 12 사이여야 합니다, email: 올바른 형식의 이메일 주소여야 합니다"}%   
 ```
-    - valid UserRequest example
+  - user register api using curl valid UserRequest example
 ```
 curl -v -H 'Content-Type: application/json'  -d '{"id" : "seek", "name" : "우병훈", "password": "pwd00", "passwordVerify": "pwd00", "email": "valid@woos.me" }' "http://localhost:8080/user/register"
 ..
