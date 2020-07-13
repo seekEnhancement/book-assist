@@ -1,15 +1,17 @@
 package woos.bookassist.api;
 
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import woos.bookassist.util.ControllerUtils;
 
-import java.nio.charset.Charset;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,7 +33,7 @@ class BookSearchControllerTest {
         String query = "java";
         ResponseEntity<List<Document>> responseEntity = testRestTemplate.exchange(
                 String.format("%s?query=%s", "/book/search", query), HttpMethod.GET,
-                new HttpEntity(createHeaders(username, password)), new ParameterizedTypeReference<List<Document>>() {
+                new HttpEntity(ControllerUtils.createHeaders(username, password)), new ParameterizedTypeReference<List<Document>>() {
                 });
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -52,19 +54,8 @@ class BookSearchControllerTest {
         String query = "notexistingbookquery";
         ResponseEntity<Object> responseEntity = testRestTemplate.exchange(
                 String.format("%s?query=%s", "/book/search", query), HttpMethod.GET,
-                new HttpEntity(createHeaders(username, password)), Object.class);
+                new HttpEntity(ControllerUtils.createHeaders(username, password)), Object.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-    }
-
-    // ref. - https://www.baeldung.com/how-to-use-resttemplate-with-basic-authentication-in-spring#manual_auth
-    private HttpHeaders createHeaders(String username, String password) {
-        return new HttpHeaders() {{
-            String auth = username + ":" + password;
-            byte[] encodedAuth = Base64.encodeBase64(
-                    auth.getBytes(Charset.forName("US-ASCII")));
-            String authHeader = "Basic " + new String(encodedAuth);
-            set("Authorization", authHeader);
-        }};
     }
 
 }

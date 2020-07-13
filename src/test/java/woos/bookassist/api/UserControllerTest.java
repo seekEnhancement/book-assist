@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import woos.bookassist.common.exception.ErrorResponse;
 import woos.bookassist.common.exception.UserRegisterFailedException;
+import woos.bookassist.util.ControllerUtils;
 
 import java.util.Map;
 
@@ -27,6 +28,16 @@ class UserControllerTest {
                 "/user/register", HttpMethod.POST,
                 new HttpEntity(createUserRequestBody()), new ParameterizedTypeReference<Void>() {
                 });
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        // db user book search
+        canSearchWithRegisteredUser();
+    }
+
+    private void canSearchWithRegisteredUser() {
+        ResponseEntity<Object> responseEntity = testRestTemplate.exchange(
+                "/book/search?query=java", HttpMethod.GET,
+                new HttpEntity(ControllerUtils.createHeaders("seek", "pwd00")), Object.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
