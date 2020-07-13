@@ -9,10 +9,12 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import woos.bookassist.api.v1.SearchV1;
 import woos.bookassist.common.exception.ErrorResponse;
 import woos.bookassist.common.exception.UserRegisterFailedException;
 import woos.bookassist.util.ControllerUtils;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,6 +34,9 @@ class UserControllerTest {
 
         // db user book search
         canSearchWithRegisteredUser();
+
+        // db user my search history
+        canSearchMyHistory();
     }
 
     private void canSearchWithRegisteredUser() {
@@ -39,6 +44,17 @@ class UserControllerTest {
                 "/book/search?query=java", HttpMethod.GET,
                 new HttpEntity(ControllerUtils.createHeaders("seek", "pwd00")), Object.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    private void canSearchMyHistory() {
+        ResponseEntity<List<SearchV1>> responseEntity = testRestTemplate.exchange(
+                "/book/mysearches", HttpMethod.GET,
+                new HttpEntity(ControllerUtils.createHeaders("seek", "pwd00")),
+                new ParameterizedTypeReference<List<SearchV1>>() {
+                });
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getBody().get(0).getQuery()).isEqualTo("java");
     }
 
     @Test

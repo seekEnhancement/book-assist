@@ -1,6 +1,7 @@
 package woos.bookassist.api;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -10,32 +11,35 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 import woos.bookassist.api.hateoas.PaginatedResultsRetrievedEvent;
+import woos.bookassist.api.v1.SearchV1;
 import woos.bookassist.common.exception.ResourceNotFoundException;
-import woos.bookassist.remote.openapi.BookSearchClient;
+import woos.bookassist.domain.search.service.BookSearchService;
 import woos.bookassist.remote.openapi.BookSearchResult;
 
 import javax.servlet.http.HttpServletResponse;
+import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static woos.bookassist.remote.openapi.BookSearchResult.Document;
 
 @RestController
+@RequiredArgsConstructor
 public class BookSearchController {
 
-    @Autowired
-    private BookSearchClient bookSearchClient;
+    private final BookSearchService bookSearchService;
+    private final ModelMapper modelMapper;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    @Autowired
-    private ApplicationEventPublisher applicationEventPublisher;
-
-    @GetMapping(value = "/book/search")
-    public List<Document> searchBook(@RequestParam("query") String query,
+    @GetMapping("/book/search")
+    public List<Document> searchBook(Principal principal,
+                                     @RequestParam("query") String query,
                                      @RequestParam(value = "page", defaultValue = "0") int page,
                                      @RequestParam(value = "size", defaultValue = "10") int size,
                                      UriComponentsBuilder uriBuilder,
                                      HttpServletResponse response) {
-        BookSearchResult searchResult = bookSearchClient.search(BookSearchClient.TARGET_TITLE, query,
-                makeOneBased(page), size);
+        BookSearchResult searchResult = bookSearchService.search(principal.getName(),
+                query, makeOneBased(page), size);
         Page<Document> resultPage = new PageImpl<>(searchResult.getDocuments(), PageRequest.of(page, size),
                 searchResult.getMeta().getTotalCount());
         if (page > resultPage.getTotalPages() || resultPage.getTotalPages() == 0) {
@@ -45,6 +49,13 @@ public class BookSearchController {
                 Document.class, uriBuilder, response, page, resultPage.getTotalPages(), size));
 
         return resultPage.getContent();
+    }
+
+    @GetMapping("/book/mysearches")
+    public List<SearchV1> mySearches(Principal principal) {
+        return bookSearchService.getUserSearches(principal.getName())
+                .stream().map(searches -> modelMapper.map(searches, SearchV1.class))
+                .collect(Collectors.toList());
     }
 
     private int makeOneBased(int zeroBasedPage) {
