@@ -52,6 +52,7 @@
   - https://developers.naver.com/docs/search/book/
   - https://www.baeldung.com/rest-api-pagination-in-spring
   - https://reflectoring.io/spring-security-password-handling/
+  - https://www.baeldung.com/parameterized-tests-junit-5
 
 ## Book Search Test
   - start application
@@ -97,4 +98,9 @@ curl -v -u 'seek:pwd00' "http://localhost:8080/book/mysearches" | json
   - top10 recommend queries
 ```
 curl -v -u 'seek:pwd00' "http://localhost:8080/book/recommend" | json
+```
+  - check h2-console
+```
+browse http://localhost:8080/h2-console , jdbc:h2:mem:testdb, sa / password
+check Users, Searches table data 
 ```

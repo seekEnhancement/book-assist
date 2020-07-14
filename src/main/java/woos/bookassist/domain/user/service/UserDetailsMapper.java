@@ -15,7 +15,7 @@ public class UserDetailsMapper {
 
     public UserDetails toUserDetails(Users user) {
         return new User(
-                user.getEmail(), user.getPassword(), true, true, true,
+                user.getId(), user.getPassword(), true, true, true,
                 true, makeDefaultUserAuthority());
     }
 

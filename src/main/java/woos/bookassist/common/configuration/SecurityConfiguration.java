@@ -27,15 +27,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .csrf()
-                .disable()
+                .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/user/register")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .httpBasic();
+                .antMatchers("/user/register", "/h2-console/**").permitAll()
+                .anyRequest().authenticated()
+                .and().headers().frameOptions().disable()
+                .and().httpBasic();
     }
 
     @Override
