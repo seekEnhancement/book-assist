@@ -2,12 +2,12 @@ package woos.bookassist.api.v1;
 
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class SearchV1 {
     private Long searchNumber;
     private String userId;
     private String query;
-    private LocalDate searchDateTime;
+    private LocalDateTime searchDateTime;
 }

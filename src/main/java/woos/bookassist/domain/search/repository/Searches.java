@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Searches")
@@ -20,5 +20,5 @@ public class Searches {
     private Long searchNumber;
     private String query;
     private String userId;
-    private LocalDate searchDateTime;
+    private LocalDateTime searchDateTime;
 }

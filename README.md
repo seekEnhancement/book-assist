@@ -81,3 +81,20 @@ curl -v -H 'Content-Type: application/json'  -d '{"id" : "seek", "name" : "우�
 < HTTP/1.1 200 
 ..
 ```
+  - book search with registered user basic authentication (--data-urlencode, curl -G for GET)
+    - you can check HATEOAS style rest pagination info in the response header `Link`
+```
+curl -v -G -u 'seek:pwd00' "http://localhost:8080/book/search" --data-urlencode "query=김미경" | json
+```
+  - in case of just 1 page - `Link` is empty
+```
+curl -v -G -u 'seek:pwd00' "http://localhost:8080/book/search" --data-urlencode "query=김미경의 리부트" | json
+```
+  - my book search history (retrieves all data currently)
+```
+curl -v -u 'seek:pwd00' "http://localhost:8080/book/mysearches" | json
+```
+  - top10 recommend queries
+```
+curl -v -u 'seek:pwd00' "http://localhost:8080/book/recommend" | json
+```

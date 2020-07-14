@@ -1,6 +1,9 @@
 package woos.bookassist.api;
 
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,7 +12,8 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.util.UriComponentsBuilder;
+import woos.bookassist.api.v1.QueryRecommendV1;
 import woos.bookassist.util.ControllerUtils;
 
 import java.util.List;
@@ -31,9 +35,10 @@ class BookSearchControllerTest {
     @Test
     public void testSearchBook() {
         String query = "java";
-        ResponseEntity<List<Document>> responseEntity = testRestTemplate.exchange(
+        var responseEntity = testRestTemplate.exchange(
                 String.format("%s?query=%s", "/book/search", query), HttpMethod.GET,
-                new HttpEntity(ControllerUtils.createHeaders(username, password)), new ParameterizedTypeReference<List<Document>>() {
+                new HttpEntity(ControllerUtils.createHeaders(username, password)),
+                new ParameterizedTypeReference<List<Document>>() {
                 });
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -43,7 +48,7 @@ class BookSearchControllerTest {
 
     @Test
     public void testUnauthorized() {
-        ResponseEntity<Object> responseEntity = testRestTemplate.exchange(
+        var responseEntity = testRestTemplate.exchange(
                 "/book/search?query=java", HttpMethod.GET,
                 null, Object.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
@@ -52,10 +57,42 @@ class BookSearchControllerTest {
     @Test
     public void testResourceNotFound() {
         String query = "notexistingbookquery";
-        ResponseEntity<Object> responseEntity = testRestTemplate.exchange(
+        var responseEntity = testRestTemplate.exchange(
                 String.format("%s?query=%s", "/book/search", query), HttpMethod.GET,
                 new HttpEntity(ControllerUtils.createHeaders(username, password)), Object.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Order(1)
+    @ParameterizedTest
+    @ValueSource(strings = {"김미경의 리부트", "돈의 속성", "더 해빙", "흔한 남매", "설민석의 한국사 대모험",
+            "이제부터는 오를 곳만 오른다", "하고 싶은 대로 살아도 괜찮아", "큰별쌤 최태성", "동아 초등 새국어사전", "코로나 이후의 세계"})
+    public void testManySearches(String query) {
+        String bookSearchUrl = UriComponentsBuilder.fromPath("/book/search").queryParam("query", query)
+                .build(false).toUriString();
+
+        var responseEntity = testRestTemplate.exchange(
+                bookSearchUrl, HttpMethod.GET,
+                new HttpEntity(ControllerUtils.createHeaders(username, password)),
+                new ParameterizedTypeReference<List<Document>>() {
+                });
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        List<Document> body = responseEntity.getBody();
+        assertThat(body.size()).isGreaterThanOrEqualTo(1);
+    }
+
+    @Order(2)
+    @Test
+    public void testRecommend() {
+        var responseEntity = testRestTemplate.exchange("/book/recommend",
+                HttpMethod.GET, new HttpEntity(ControllerUtils.createHeaders(username, password)),
+                new ParameterizedTypeReference<List<QueryRecommendV1>>() {
+                });
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        var body = responseEntity.getBody();
+        assertThat(body.size()).isEqualTo(10);
+
     }
 
 }

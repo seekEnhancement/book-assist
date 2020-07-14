@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 import woos.bookassist.api.hateoas.PaginatedResultsRetrievedEvent;
+import woos.bookassist.api.v1.QueryRecommendV1;
 import woos.bookassist.api.v1.SearchV1;
 import woos.bookassist.common.exception.ResourceNotFoundException;
 import woos.bookassist.domain.search.service.BookSearchService;
@@ -55,6 +56,13 @@ public class BookSearchController {
     public List<SearchV1> mySearches(Principal principal) {
         return bookSearchService.getUserSearches(principal.getName())
                 .stream().map(searches -> modelMapper.map(searches, SearchV1.class))
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/book/recommend")
+    public List<QueryRecommendV1> recommend() {
+        return bookSearchService.getTop10Queries()
+                .stream().map(queryRecommend -> modelMapper.map(queryRecommend, QueryRecommendV1.class))
                 .collect(Collectors.toList());
     }
 
