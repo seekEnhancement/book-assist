@@ -20,16 +20,17 @@
     - spring boot starter-web
     - spring security
     - spring data-jpa
-    - spring cloud openfeign (with hystrix/ribbon)
+    - spring cloud openfeign (with hystrix/ribbon/feign-httpclient/apache httpclient/spring-retry)
     - reactor-core
     - caffeine cache
+    - awaitlity (for test)
     - springfox swagger
   - key features
     - kakao/naver openapi integration with declarative httpclient(openfeign)
       - hystrix circuit breaker / ribbon retry (apache httpclient connec/read timeout)
     - spring mvc HATEOAS style rest pagination
     - asynchronous search history db insert using reactor  
-    - top 10 search keyword using caffeine in-memory cache (1m expire)
+    - top 10 search keyword using caffeine in-memory cache (10s expire)
     - spring security database userdetails extension, basic authentication, [oauth token]
     - spring data jpa - entity/repository - Users, Searches, User-Search, [Books]
   - Load Test
@@ -53,6 +54,7 @@
   - https://www.baeldung.com/rest-api-pagination-in-spring
   - https://reflectoring.io/spring-security-password-handling/
   - https://www.baeldung.com/parameterized-tests-junit-5
+  - https://www.baeldung.com/awaitlity-testing
 
 ## Book Search Test
   - start application

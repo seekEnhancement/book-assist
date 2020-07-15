@@ -22,15 +22,22 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation 'io.github.openfeign:feign-httpclient'
+    implementation 'io.github.openfeign:feign-hystrix'
+    implementation 'org.apache.httpcomponents:httpclient'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-ribbon'
+    runtimeOnly 'org.springframework.retry:spring-retry'
     implementation 'org.projectlombok:lombok'
     implementation 'com.h2database:h2'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.modelmapper:modelmapper:2.3.8'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'com.github.ben-manes.caffeine:caffeine'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.awaitility:awaitility:4.0.3'
 }
 
 dependencyManagement {

@@ -1,7 +1,9 @@
 package woos.bookassist.api;
 
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +23,9 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static woos.bookassist.remote.openapi.BookSearchResult.Document;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class BookSearchControllerTest {
+public class BookSearchControllerTest {
     @Autowired
     TestRestTemplate testRestTemplate;
 

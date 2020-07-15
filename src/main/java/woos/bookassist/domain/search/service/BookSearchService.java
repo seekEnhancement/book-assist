@@ -1,5 +1,6 @@
 package woos.bookassist.domain.search.service;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import woos.bookassist.domain.search.repository.QueryRecommend;
 import woos.bookassist.domain.search.repository.SearchRepository;
@@ -30,6 +31,7 @@ public class BookSearchService {
         return searchRepository.findByUserIdOrderBySearchDateTimeDesc(userId);
     }
 
+    @Cacheable(cacheNames = "top10Queries")
     public List<QueryRecommend> getTop10Queries() {
         return searchRepository.findTop10Queries();
     }
