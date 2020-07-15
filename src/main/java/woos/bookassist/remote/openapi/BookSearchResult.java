@@ -1,18 +1,27 @@
 package woos.bookassist.remote.openapi;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+@Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class BookSearchResult {
     Meta meta;
     List<Document> documents;
 
+    @Builder
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Document implements Serializable {
         private static final long serialVersionUID = -5930756756287719790L;
         String title;
@@ -30,7 +39,10 @@ public class BookSearchResult {
         String status;
     }
 
+    @Builder
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Meta {
         @JsonProperty("is_end")
         boolean end;

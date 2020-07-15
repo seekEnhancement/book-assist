@@ -30,6 +30,12 @@ logging:
     root: INFO
     woos.bookassist: DEBUG
 
+feign:
+  httpclient:
+    enabled: true
+  hystrix:
+    enabled: true
+
 openapi:
   kakao:
     appKey: ${DEVKAKAO_APP_KEY}

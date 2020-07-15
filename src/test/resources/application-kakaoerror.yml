@@ -1,0 +1,4 @@
+kakao:
+  ribbon:
+    NIWSServerListClassName: com.netflix.loadbalancer.ConfigurationBasedServerList
+    listOfServers: https://nonexisting.kakao.com  # nonexisting kakao domain will fail -> fallback to naver
