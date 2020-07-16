@@ -1,13 +1,12 @@
 package woos.bookassist.domain.user.service;
 
+import java.util.List;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import woos.bookassist.domain.user.repository.UserRepository;
 import woos.bookassist.domain.user.repository.Users;
-
-import java.util.List;
 
 @Service
 public class DatabaseUserDetailsService implements UserDetailsService {

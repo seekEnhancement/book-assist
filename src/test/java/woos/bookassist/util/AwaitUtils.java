@@ -1,8 +1,7 @@
 package woos.bookassist.util;
 
-import org.awaitility.core.ThrowingRunnable;
-
 import java.util.concurrent.TimeUnit;
+import org.awaitility.core.ThrowingRunnable;
 
 import static org.awaitility.Awaitility.await;
 

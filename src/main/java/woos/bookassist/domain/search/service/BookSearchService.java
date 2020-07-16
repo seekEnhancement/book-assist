@@ -1,5 +1,7 @@
 package woos.bookassist.domain.search.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -10,9 +12,6 @@ import woos.bookassist.domain.search.repository.SearchRepository;
 import woos.bookassist.domain.search.repository.Searches;
 import woos.bookassist.remote.openapi.BookSearchClient;
 import woos.bookassist.remote.openapi.BookSearchResult;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -35,7 +34,8 @@ public class BookSearchService {
         log.debug("== BookSearchService.saveSearchHistoryAsync called.");
         return Mono.fromCallable(() -> {
             log.debug("== Mono inner searchRepository.save before.");
-            searchRepository.save(Searches.builder().query(query).userId(userId).searchDateTime(LocalDateTime.now()).build());
+            searchRepository.save(Searches.builder()
+                    .query(query).userId(userId).searchDateTime(LocalDateTime.now()).build());
             log.debug("== Mono inner searchRepository.save after.");
             return Mono.empty();
         }).subscribeOn(Schedulers.elastic()).then();

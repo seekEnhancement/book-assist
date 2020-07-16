@@ -1,5 +1,7 @@
 package woos.bookassist.domain.search.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import org.awaitility.core.ThrowingRunnable;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -11,9 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import woos.bookassist.domain.search.repository.QueryRecommend;
 import woos.bookassist.util.AwaitUtils;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

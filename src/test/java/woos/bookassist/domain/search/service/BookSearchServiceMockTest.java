@@ -1,5 +1,6 @@
 package woos.bookassist.domain.search.service;
 
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -9,11 +10,14 @@ import woos.bookassist.domain.search.repository.Searches;
 import woos.bookassist.remote.openapi.BookSearchClient;
 import woos.bookassist.remote.openapi.BookSearchResult;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-import static woos.bookassist.remote.openapi.BookSearchResult.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static woos.bookassist.remote.openapi.BookSearchResult.Document;
+import static woos.bookassist.remote.openapi.BookSearchResult.Meta;
+import static woos.bookassist.remote.openapi.BookSearchResult.builder;
 
 public class BookSearchServiceMockTest {
     private BookSearchService bookSearchService;

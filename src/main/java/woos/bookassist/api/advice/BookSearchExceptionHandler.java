@@ -1,5 +1,6 @@
 package woos.bookassist.api.advice;
 
+import java.util.function.Consumer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +12,6 @@ import woos.bookassist.common.exception.BaseRuntimeException;
 import woos.bookassist.common.exception.ErrorResponse;
 import woos.bookassist.common.exception.ResourceNotFoundException;
 import woos.bookassist.common.exception.UserRegisterFailedException;
-
-import java.util.function.Consumer;
 
 @Slf4j
 @RestControllerAdvice

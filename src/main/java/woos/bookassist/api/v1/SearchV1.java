@@ -1,8 +1,7 @@
 package woos.bookassist.api.v1;
 
-import lombok.Data;
-
 import java.time.LocalDateTime;
+import lombok.Data;
 
 @Data
 public class SearchV1 {

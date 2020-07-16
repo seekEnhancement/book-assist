@@ -1,12 +1,11 @@
 package woos.bookassist.api.request;
 
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
-
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Data

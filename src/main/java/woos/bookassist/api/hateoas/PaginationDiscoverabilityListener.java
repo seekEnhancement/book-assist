@@ -1,16 +1,16 @@
 package woos.bookassist.api.hateoas;
 
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * ref. - https://gist.github.com/eugenp/1622997
  */
 @Component
-class PaginatedResultsRetrievedEventDiscoverabilityListener implements ApplicationListener<PaginatedResultsRetrievedEvent> {
+class PaginatedResultsRetrievedEventDiscoverabilityListener
+        implements ApplicationListener<PaginatedResultsRetrievedEvent> {
 
     public static String createLinkHeader(final String uri, final String rel) {
         return "<" + uri + ">; rel=\"" + rel + "\"";
@@ -18,10 +18,13 @@ class PaginatedResultsRetrievedEventDiscoverabilityListener implements Applicati
 
     @Override
     public void onApplicationEvent(final PaginatedResultsRetrievedEvent ev) {
-        addLinkHeaderOnPagedResourceRetrieval(ev.getUriBuilder(), ev.getResponse(), ev.getClazz(), ev.getPage(), ev.getTotalPages(), ev.getPageSize());
+        addLinkHeaderOnPagedResourceRetrieval(ev.getUriBuilder(), ev.getResponse(),
+                ev.getClazz(), ev.getPage(), ev.getTotalPages(), ev.getPageSize());
     }
 
-    void addLinkHeaderOnPagedResourceRetrieval(final UriComponentsBuilder uriBuilder, final HttpServletResponse response, final Class clazz, final int page, final int totalPages, final int pageSize) {
+    void addLinkHeaderOnPagedResourceRetrieval(final UriComponentsBuilder uriBuilder,
+                                               final HttpServletResponse response, final Class clazz,
+                                               final int page, final int totalPages, final int pageSize) {
         final String resourceName = clazz.getSimpleName().toString().toLowerCase();
         uriBuilder.path("/admin/" + resourceName);
 
@@ -49,19 +52,23 @@ class PaginatedResultsRetrievedEventDiscoverabilityListener implements Applicati
     }
 
     String constructNextPageUri(final UriComponentsBuilder uriBuilder, final int page, final int size) {
-        return uriBuilder.replaceQueryParam("page", page + 1).replaceQueryParam("size", size).build().encode().toUriString();
+        return uriBuilder.replaceQueryParam("page", page + 1)
+                .replaceQueryParam("size", size).build().encode().toUriString();
     }
 
     String constructPrevPageUri(final UriComponentsBuilder uriBuilder, final int page, final int size) {
-        return uriBuilder.replaceQueryParam("page", page - 1).replaceQueryParam("size", size).build().encode().toUriString();
+        return uriBuilder.replaceQueryParam("page", page - 1)
+                .replaceQueryParam("size", size).build().encode().toUriString();
     }
 
     String constructFirstPageUri(final UriComponentsBuilder uriBuilder, final int size) {
-        return uriBuilder.replaceQueryParam("page", 0).replaceQueryParam("size", size).build().encode().toUriString();
+        return uriBuilder.replaceQueryParam("page", 0)
+                .replaceQueryParam("size", size).build().encode().toUriString();
     }
 
     String constructLastPageUri(final UriComponentsBuilder uriBuilder, final int totalPages, final int size) {
-        return uriBuilder.replaceQueryParam("page", totalPages).replaceQueryParam("size", size).build().encode().toUriString();
+        return uriBuilder.replaceQueryParam("page", totalPages)
+                .replaceQueryParam("size", size).build().encode().toUriString();
     }
 
     boolean hasNextPage(final int page, final int totalPages) {

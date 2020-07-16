@@ -1,5 +1,7 @@
 package woos.bookassist.api;
 
+import java.util.List;
+import java.util.Map;
 import org.awaitility.core.ThrowingRunnable;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -20,9 +22,6 @@ import woos.bookassist.common.exception.UserRegisterFailedException;
 import woos.bookassist.domain.search.service.BookSearchService;
 import woos.bookassist.util.AwaitUtils;
 import woos.bookassist.util.ControllerUtils;
-
-import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

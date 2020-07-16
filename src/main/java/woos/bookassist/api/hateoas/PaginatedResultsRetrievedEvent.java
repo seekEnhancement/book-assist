@@ -1,10 +1,9 @@
 package woos.bookassist.api.hateoas;
 
+import java.io.Serializable;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.Serializable;
 
 /**
  * ref. - https://github.com/yciabaud/REST/blob/master/src/main/java/org/rest/common/event/PaginatedResultsRetrievedEvent.java
@@ -18,7 +17,9 @@ public final class PaginatedResultsRetrievedEvent<T extends Serializable> extend
     private final int totalPages;
     private final int pageSize;
 
-    public PaginatedResultsRetrievedEvent(final Class<T> clazz, final UriComponentsBuilder uriBuilderToSet, final HttpServletResponse responseToSet, final int pageToSet, final int totalPagesToSet, final int pageSizeToSet) {
+    public PaginatedResultsRetrievedEvent(final Class<T> clazz, final UriComponentsBuilder uriBuilderToSet,
+                                          final HttpServletResponse responseToSet, final int pageToSet,
+                                          final int totalPagesToSet, final int pageSizeToSet) {
         super(clazz);
 
         this.uriBuilder = uriBuilderToSet;

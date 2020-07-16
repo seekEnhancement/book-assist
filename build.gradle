@@ -1,19 +1,54 @@
+import java.text.SimpleDateFormat
+
 plugins {
     id 'org.springframework.boot' version '2.3.1.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'java'
+    id 'checkstyle'
+    id 'jacoco'
+    id 'pmd'
+    id 'de.aaschmid.cpd' version '3.1'
+    id 'com.gorylenko.gradle-git-properties' version '2.2.2'
+    id "org.sonarqube" version "2.7.1"
 }
 
 group = 'woos'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
-repositories {
-    mavenCentral()
-}
-
 ext {
     set('springCloudVersion', "Hoxton.SR6")
+    gitBranchName = "master"
+    myDateFormat = "yyyy-MM-dd HH:mm:ss"
+    myDateFormatTimeZone = "Asia/Seoul"
+}
+
+springBoot {
+    buildInfo {
+        properties {
+            // Generate extra build info.
+            additional = [
+                    os     : "${System.properties['os.name']} (${System.properties['os.version']})",
+                    machine: InetAddress.localHost.hostName,
+                    time   : buildTime()
+            ]
+        }
+    }
+}
+
+def buildTime() {
+    final dateFormat = new SimpleDateFormat(myDateFormat)
+    dateFormat.timeZone = TimeZone.getTimeZone(myDateFormatTimeZone)
+    dateFormat.format(new Date())
+}
+
+gitProperties {
+    dateFormat = myDateFormat
+    dateFormatTimeZone = myDateFormatTimeZone
+}
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
@@ -48,7 +83,44 @@ dependencyManagement {
     }
 }
 
+checkstyle {
+    toolVersion = '8.8'
+    maxWarnings = 0
+}
+
+jacoco {
+    toolVersion = '0.8.2'
+}
+
+pmd {
+    toolVersion = '6.25.0'
+    ruleSets = ["java-basic", "java-braces", "java-unnecessary", "java-empty"]
+    sourceSets = [project.sourceSets.main]
+    ignoreFailures = true
+}
+
+cpd {
+    toolVersion = pmd.toolVersion
+    sourceSets = [project.sourceSets.main as SourceSet]
+    minimumTokenCount = 20
+    ignoreFailures = true
+}
+
+cpdCheck {
+    reports {
+        xml.enabled = true
+    }
+    source = sourceSets.main.allJava
+}
 
 test {
+    // Use junit platform for unit tests
     useJUnitPlatform()
+    testLogging {
+        events "PASSED", "FAILED", "SKIPPED"
+    }
+}
+
+bootRun {
+    systemProperties = System.properties
 }

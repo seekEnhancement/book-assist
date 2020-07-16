@@ -1,12 +1,11 @@
 package woos.bookassist.remote.openapi;
 
 import feign.hystrix.FallbackFactory;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static woos.bookassist.remote.openapi.BookSearchResult.Document;
 import static woos.bookassist.remote.openapi.BookSearchResult.Meta;

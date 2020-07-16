@@ -1,5 +1,6 @@
 package woos.bookassist.api;
 
+import java.util.List;
 import org.awaitility.core.ThrowingRunnable;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -19,8 +20,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import woos.bookassist.api.v1.QueryRecommendV1;
 import woos.bookassist.util.AwaitUtils;
 import woos.bookassist.util.ControllerUtils;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static woos.bookassist.remote.openapi.BookSearchResult.Document;
