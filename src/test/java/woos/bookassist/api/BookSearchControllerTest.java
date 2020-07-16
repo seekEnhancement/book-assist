@@ -1,5 +1,6 @@
 package woos.bookassist.api;
 
+import org.awaitility.core.ThrowingRunnable;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.util.UriComponentsBuilder;
 import woos.bookassist.api.v1.QueryRecommendV1;
+import woos.bookassist.util.AwaitUtils;
 import woos.bookassist.util.ControllerUtils;
 
 import java.util.List;
@@ -88,14 +90,18 @@ public class BookSearchControllerTest {
     @Order(2)
     @Test
     public void testRecommend() {
-        var responseEntity = testRestTemplate.exchange("/book/recommend",
-                HttpMethod.GET, new HttpEntity(ControllerUtils.createHeaders(username, password)),
-                new ParameterizedTypeReference<List<QueryRecommendV1>>() {
-                });
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        var body = responseEntity.getBody();
-        assertThat(body.size()).isEqualTo(10);
-
+        AwaitUtils.awaitAndCheck(2000, 3000, new ThrowingRunnable() {
+            @Override
+            public void run() throws Throwable {
+                var responseEntity = testRestTemplate.exchange("/book/recommend",
+                        HttpMethod.GET, new HttpEntity(ControllerUtils.createHeaders(username, password)),
+                        new ParameterizedTypeReference<List<QueryRecommendV1>>() {
+                        });
+                assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+                var body = responseEntity.getBody();
+                assertThat(body.size()).isEqualTo(10);
+            }
+        });
     }
 
 }

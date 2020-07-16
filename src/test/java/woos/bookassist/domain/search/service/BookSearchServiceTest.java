@@ -1,5 +1,6 @@
 package woos.bookassist.domain.search.service;
 
+import org.awaitility.core.ThrowingRunnable;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -9,17 +10,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import woos.bookassist.domain.search.repository.QueryRecommend;
+import woos.bookassist.util.AwaitUtils;
 
-import java.time.Duration;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.await;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@SpringBootTest(value = {"spring.cache.caffeine.spec: expireAfterWrite=1s"})
+@SpringBootTest
 @DirtiesContext
 class BookSearchServiceTest {
     @Autowired
@@ -41,36 +40,50 @@ class BookSearchServiceTest {
     @Order(2)
     @Test
     public void testGetUserSearches() {
-        var userSearches = bookSearchService.getUserSearches(userId);
-        assertThat(userSearches.size()).isGreaterThanOrEqualTo(1);
+        AwaitUtils.awaitAndCheck(100, 200, new ThrowingRunnable() {
+            @Override
+            public void run() throws Throwable {
+                var userSearches = bookSearchService.getUserSearches(userId);
+                assertThat(userSearches.size()).isGreaterThanOrEqualTo(1);
+            }
+        });
     }
 
     @Order(3)
     @Test
     public void getTop10Queries() {
-        var top10Queries = bookSearchService.getTop10Queries();
-        assertThat(top10Queries.size()).isGreaterThanOrEqualTo(1);
+        AwaitUtils.awaitAndCheck(1000, 2000, new ThrowingRunnable() {
+            @Override
+            public void run() throws Throwable {
+                // first call - cache make
+                var top10Queries = bookSearchService.getTop10Queries();
+                assertThat(top10Queries.size()).isGreaterThanOrEqualTo(1);
 
-        // more searches before caffeine cache expiring
-        String query2 = "김미경의 리부트";
-        bookSearchService.search(userId, query2, 1, 10);
-        String query3 = "부자";
-        bookSearchService.search(userId, query3, 1, 10);
+                // more searches before caffeine cache expiring
+                String query2 = "Spring Boot";
+                bookSearchService.search(userId, query2, 1, 10);
+                String query3 = "Spring Cloud";
+                bookSearchService.search(userId, query3, 1, 10);
+            }
+        });
 
         // cached top10 queries does not contains new searches
-        var top10Queries2 = bookSearchService.getTop10Queries();
-        assertThat(getQueriesOnly(top10Queries2)).doesNotContain("김미경의 리부트", "부자");
+        AwaitUtils.awaitAndCheck(2000, 3000, new ThrowingRunnable() {
+            @Override
+            public void run() throws Throwable {
+                var top10Queries2 = bookSearchService.getTop10Queries();
+                assertThat(getQueriesOnly(top10Queries2)).doesNotContain("Spring Boot", "Spring Cloud");
+            }
+        });
 
-        // after cache expire - overridden with spring.cache.caffeine.spec: expireAfterWrite=1s
-        // cache re-synced
-        await()
-                .pollDelay(Duration.ofSeconds(1))
-                .atMost(2, TimeUnit.SECONDS)
-                .untilAsserted(() -> {
-                    var top10Queries3 = bookSearchService.getTop10Queries();
-                    assertThat(getQueriesOnly(top10Queries3)).contains("김미경의 리부트", "부자");
-                });
-
+        // after cache expire - cache re-synced
+        AwaitUtils.awaitAndCheck(11000, 12000, new ThrowingRunnable() {
+            @Override
+            public void run() throws Throwable {
+                var top10Queries3 = bookSearchService.getTop10Queries();
+                assertThat(getQueriesOnly(top10Queries3)).contains("Spring Boot", "Spring Cloud");
+            }
+        });
     }
 
     private List<String> getQueriesOnly(List<QueryRecommend> top10Queries) {
