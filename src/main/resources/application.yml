@@ -49,6 +49,11 @@ hystrix:
           strategy: THREAD
           thread:
             timeoutInMilliseconds: 3000
+  threadpool:
+    default:
+      coreSize: 10
+      maximumSize: 100
+      allowMaximumSizeToDivergeFromCoreSize: true
 
 ribbon:
   eager-load:

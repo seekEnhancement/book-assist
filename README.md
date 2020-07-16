@@ -106,4 +106,75 @@ browse http://localhost:8080/h2-console , jdbc:h2:mem:testdb, sa / password
 check Users, Searches table data 
 ```
 
+## apache bench performance test
+  - jar 패키징
+```
+./gradlew clean build -x test
+```
+  - spring boot prd profile 로 실행
+```
+java -Dfile.encoding=UTF-8 -Dspring.profiles.active=prd -jar build/libs/bookassist-0.0.1-SNAPSHOT.jar
+```
+  - 기본 사용자로 curl search 정상 동작 확인 (cf. 한글 query parameter 는 url-encoding 필요)
+```
+curl -u 'woo:woo00' "http://localhost:8080/book/search?query=java"
+```
+  - apache bench 로 -n 1000, -c 50 의 부하를 줘봄 (basic 인증 - 기본 사용자)
+```
+➜  ~ ab -n 1000 -c 50 -A woo:woo00 "http://localhost:8080/book/search?query=java" 
+This is ApacheBench, Version 2.3 <$Revision: 1843412 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        
+Server Hostname:        localhost
+Server Port:            8080
+
+Document Path:          /book/search?query=java
+Document Length:        6965 bytes
+
+Concurrency Level:      50
+Time taken for tests:   16.872 seconds
+Complete requests:      1000
+Failed requests:        0
+Total transferred:      7446000 bytes
+HTML transferred:       6965000 bytes
+Requests per second:    59.27 [#/sec] (mean)
+Time per request:       843.587 [ms] (mean)
+Time per request:       16.872 [ms] (mean, across all concurrent requests)
+Transfer rate:          430.99 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   3.2      0     101
+Processing:   138  823  71.8    826    1068
+Waiting:      135  823  71.8    826    1068
+Total:        138  824  71.6    826    1069
+
+Percentage of the requests served within a certain time (ms)
+  50%    826
+  66%    850
+  75%    864
+  80%    873
+  90%    898
+  95%    924
+  98%    949
+  99%    987
+ 100%   1069 (longest request)
+```
+
 [[Install Guide](install.md)]
