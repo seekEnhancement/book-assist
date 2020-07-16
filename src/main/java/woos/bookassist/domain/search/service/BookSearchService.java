@@ -31,7 +31,7 @@ public class BookSearchService {
         return searchResult;
     }
 
-    private Mono<Void> saveSearchHistoryAsync(String userId, String query) {
+    protected Mono<Void> saveSearchHistoryAsync(String userId, String query) {
         log.debug("== BookSearchService.saveSearchHistoryAsync called.");
         return Mono.fromCallable(() -> {
             log.debug("== Mono inner searchRepository.save before.");
