@@ -24,7 +24,7 @@
     - reactor-core
     - caffeine cache
     - awaitlity (for test)
-    - springfox swagger
+    - [springfox swagger]
   - key features
     - kakao/naver openapi integration with declarative httpclient(openfeign)
       - hystrix circuit breaker / ribbon retry (apache httpclient connec/read timeout)
@@ -32,19 +32,18 @@
     - asynchronous search history db insert using reactor  
     - top 10 search keyword using caffeine in-memory cache (10s expire)
     - spring security database userdetails extension, basic authentication, [oauth token]
-    - spring data jpa - entity/repository - Users, Searches, User-Search, [Books]
-  - Load Test
-    - jmeter random csv data file (user, keyword)
-    - apache bench
-    - [openapi mock server?]
+    - spring data jpa - entity/repository - Users, Searches, [Books]
   - Continuous Integration
     - gradle plugins - pmd, cpd, jacoco, sonarqube
     - jenkins pipeline
     - sonarqube (Sonar Way rule)
-  - Containerize
+  - [Load Test]
+    - [jmeter random csv data file (user, keyword)]
+    - apache bench
+  - [Containerize]
     - cloud native build pack
     - tagging -> dockerhub push
-  - Environment Setup
+  - [Environment Setup]
     - jenkins, sonarqube, performance test environment
 
 ## References
@@ -106,3 +105,5 @@ curl -v -u 'seek:pwd00' "http://localhost:8080/book/recommend" | json
 browse http://localhost:8080/h2-console , jdbc:h2:mem:testdb, sa / password
 check Users, Searches table data 
 ```
+
+[[Install Guide](install.md)]
